@@ -6,7 +6,7 @@ from app.models.venta import Venta, VentaCreate, VentaResponse
 
 router = APIRouter()
 
-@router.post("/ventas/", response_model=VentaResponse)
+@router.post("/ventas", response_model=VentaResponse)
 def create_venta(venta: VentaCreate, db: Session = Depends(get_db)):
     new_venta = Venta(id_product=venta.id_product, quantity=venta.quantity, observation=venta.observation)
     db.add(new_venta)
@@ -21,7 +21,7 @@ def read_venta(venta_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Venta not found")
     return venta
 
-@router.get("/ventas/", response_model=List[VentaResponse])
+@router.get("/ventas", response_model=List[VentaResponse])
 def get_all_ventas(db: Session = Depends(get_db)):
     ventas = db.query(Venta).all()
     return ventas

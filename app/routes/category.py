@@ -6,7 +6,7 @@ from app.models.category import Category, CategoryResponse, CategoryCreate
 
 router = APIRouter()
 
-@router.post("/categories/", response_model=CategoryResponse)
+@router.post("/categories", response_model=CategoryResponse)
 def create_category(category: CategoryCreate, db: Session = Depends(get_db)):
     new_category = Category(name=category.name)
     db.add(new_category)
@@ -21,7 +21,7 @@ def read_category(category_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Category not found")
     return category
 
-@router.get("/categories/", response_model=List[CategoryResponse])
+@router.get("/categories", response_model=List[CategoryResponse])
 def get_all_categories(db: Session = Depends(get_db)):
     categories = db.query(Category).all()
     return categories

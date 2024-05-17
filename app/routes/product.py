@@ -6,7 +6,7 @@ from app.models.product import Product, ProductCreate, ProductResponse
 
 router = APIRouter()
 
-@router.post("/products/", response_model=ProductResponse)
+@router.post("/products", response_model=ProductResponse)
 def create_product(product: ProductCreate, db: Session = Depends(get_db)):
     new_product = Product(name=product.name, price=product.price, stock=product.stock, category_id=product.category_id)
     db.add(new_product)
@@ -21,7 +21,7 @@ def read_product(product_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     return product
 
-@router.get("/products/", response_model=List[ProductResponse])
+@router.get("/products", response_model=List[ProductResponse])
 def get_all_products(db: Session = Depends(get_db)):
     products = db.query(Product).all()
     return products

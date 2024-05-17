@@ -3,8 +3,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from pydantic import BaseModel
 from app.models.category import Category
+from .base import Base
 
-Base = declarative_base()
+# Base = declarative_base()
 
 class Product(Base):
     __tablename__ = "products"
@@ -15,7 +16,7 @@ class Product(Base):
     stock = Column(Integer)
     category_id = Column(Integer, ForeignKey("categories.id"))
 
-    category = relationship("Category", back_populates="products")
+    category = relationship(Category, back_populates="products")
 
 class ProductCreate(BaseModel):
     name: str

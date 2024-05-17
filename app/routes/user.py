@@ -6,7 +6,7 @@ from app.models.user import User, UserCreate, UserResponse
 
 router = APIRouter()
 
-@router.post("/users/", response_model=UserResponse)
+@router.post("/users", response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user = User(username=user.username, password=user.password, full_name=user.full_name)
     db.add(new_user)
@@ -21,7 +21,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
-@router.get("/users/", response_model=List[UserResponse])
+@router.get("/users", response_model=List[UserResponse])
 def get_all_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users

@@ -3,8 +3,9 @@ from sqlalchemy.orm import relationship
 from pydantic import BaseModel
 from app.models.product import Product
 from sqlalchemy.ext.declarative import declarative_base
+from .base import Base
 
-Base = declarative_base()
+# Base = declarative_base()
 
 class Venta(Base):
     __tablename__ = "venta"
