@@ -1,5 +1,6 @@
 from fastapi import HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from typing import List
 from db.mysql import SessionLocal, get_db
 from app.models.venta import Venta, VentaCreate, VentaResponse
@@ -33,6 +34,13 @@ def delete_product(venta_id: int,
     if product is None:
         raise HTTPException(status_code=404, detail="Venta not found")
     
-    db.delete(product)
-    db.commit()
-    return
+    try:
+        db.delete(product)
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=400, detail="No se puede eliminar la venta debido a una restricción de clave foránea")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
+    return 
